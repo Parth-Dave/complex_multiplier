@@ -6,42 +6,54 @@
 
 
 
-struct complex_int
-{
+typedef struct {
 	int real;
 	int complex;
-};
-struct complex_int *data_readfile(FILE *input_file){
-	int N;
-	fscanf(input_file,"%d",N);
-	struct complex_int C_array[N]; 
-	char *temp=malloc(10*sizeof(char));
+}complex_int;
+
+int N;
+
+complex_int *data_readfile(){
+	
+	scanf("%d", &N);
+	//fscanf(input_file," %d ", &N);
+	printf("after fscanf and N is %d\n",N);
+	complex_int *C_array=malloc(N*sizeof(complex_int));
+	printf("after complex C_array\n"); 
+
+	char *temp=malloc(100*sizeof(char));
 	int j;
 	char c;
+	int sum=0;
+	int flag=0;
+	printf("inside data_readfile\n");
 	for(int i=0;i<N;i++){
-		fgets(temp,10,input_file);
-		j=0;
-		while(temp[j]!='\0'){
-			if(temp[j]>='0'&& temp[j]<='9'){
-
-			}
-		}
+		scanf("%d",&j);
+		C_array[i].real=j;
+		scanf("%c",&c);
+		scanf("%c",&c);
+		scanf("%d",&j);
+		C_array[i].complex=j;
+		printf("i is %d and real is %d and complex is %d \n",i,C_array[i].real,C_array[i].complex);
 	}
+	return C_array;
 }
+
 int main(int argc,char **argv){
-	FILE *input_file;
+	//FILE *input_file;
 
-	if(argc==0){
-		input_file=fopen("input.txt","r");
-	}
-	else if(argc==1){
-		input_file=fopen(argv[0],"r");
-	}
-	else{
-		printf("you can only pass one or less file name \n");
-		return 1;
-	}
+	// if(argc==0){
+	// 	input_file=fopen("input.txt","r");
+	// }
+	// else if(argc==1){
+	// 	input_file=fopen(argv[0],"r");
+	// }
+	// else{
+	// 	printf("you can only pass one or less file name \n");
+	// 	return 1;
+	// }
 
-	data_readfile(input_file);
+	complex_int *D = data_readfile();	
+	
 
 }
