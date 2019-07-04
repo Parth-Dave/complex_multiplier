@@ -68,29 +68,32 @@ int main(int argc,char **argv){
 	D = data_readfile();	
 	int t;
 	
-	temp=(complex_int *)malloc((N/2)*sizeof(complex_int));
+	temp=(complex_int *)malloc(((N/2)+1)*sizeof(complex_int));
 	while(N>1){	
 		main_i=0;
 		pthread_t threads[N/2];
 		printf("creating %d threads\n",N/2 );
-		for(t=0;t<N/2;t++){
+		for(t=0;t<N/2;t++){//making threads
 			
 			pthread_create(&threads[t],NULL,comp_multiply,(void *)D);
 		}
 		for(t=0;t<(N/2);t++){
-			pthread_join(threads[t], NULL);
+			pthread_join(threads[t], NULL);//joining threads
 		}
-		if((N/2)%2!=0){
-			temp[main_i]=D[main_i*2];
+		if(N%2!=0){
+			printf("main_i is %d\n",main_i);
+			temp[main_i]=D[(main_i)*2];//adding the remaining complex number
 			N++;
 
 		}
+		printf("N/2 after adding remainder complex is %d\n",N/2 );
 		for(t=0;t<(N/2);t++){
-			D[t]=temp[t];
+			D[t]=temp[t];//preparing data for next round;
 		}
-		N=N/2;
+		N=N/2;//next round of multiplication
+		printf("N at end of loop is %d\n",N );
 	}
-	printf("Final multiplication is %d + i %d \n",D[0].real,D[0].complex );
+	printf("Final multiplication is %d + i%d \n",D[0].real,D[0].complex );
 	
 
 }
