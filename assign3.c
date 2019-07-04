@@ -3,7 +3,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <stdlib.h>
-
+#include <pthread.h>
 
 
 typedef struct {
@@ -11,22 +11,50 @@ typedef struct {
 	int complex;
 }complex_int;
 
+typedef struct {
+	int i;
+	complex_int *arr_pointer;
+
+}program_var;
+
 int N;
+complex_int *D;
+complex_int *temp;
+int main_i=0;
+
+void* comp_multiply(void *arg){
+	int i =main_i;
+	main_i++;
+	//printf("arg recieved is %d\n",i );
+	//int val=*i;
+	//printf("val is %d\n",val);
+	//printf("D %d has real %d and complex %d \n",val,D[val].real,D[val].complex);
+	complex_int a=D[i*2];
+	//printf("A has real %d and complex %d \n",a.real,a.complex);
+	complex_int b=D[(i*2)+1];
+	//printf("B has real %d and complex %d \n",b.real,b.complex);
+	complex_int c;
+	c.real=(a.real*b.real) -(a.complex*b.complex);
+	c.complex=(a.complex*b.real)+(a.real*b.complex);
+	//printf("C has real %d and complex %d \n",c.real,c.complex);
+	temp[i]=c;
+
+}
 
 complex_int *data_readfile(){
 	
 	scanf("%d", &N);
 	//fscanf(input_file," %d ", &N);
-	printf("after fscanf and N is %d\n",N);
-	complex_int *C_array=malloc(N*sizeof(complex_int));
-	printf("after complex C_array\n"); 
+	//printf("after fscanf and N is %d\n",N);
+	complex_int *C_array=(complex_int *)malloc(N*sizeof(complex_int));
+	//printf("after complex C_array\n"); 
 
-	char *temp=malloc(100*sizeof(char));
+	//char *temp=malloc(100*sizeof(char));
 	int j;
 	char c;
 	int sum=0;
 	int flag=0;
-	printf("inside data_readfile\n");
+	//printf("inside data_readfile\n");
 	for(int i=0;i<N;i++){
 		scanf("%d",&j);
 		C_array[i].real=j;
@@ -34,7 +62,7 @@ complex_int *data_readfile(){
 		scanf("%c",&c);
 		scanf("%d",&j);
 		C_array[i].complex=j;
-		printf("i is %d and real is %d and complex is %d \n",i,C_array[i].real,C_array[i].complex);
+	//	printf("i is %d and real is %d and complex is %d \n",i,C_array[i].real,C_array[i].complex);
 	}
 	return C_array;
 }
@@ -53,7 +81,23 @@ int main(int argc,char **argv){
 	// 	return 1;
 	// }
 
-	complex_int *D = data_readfile();	
+	D = data_readfile();	
+	int t;
+	// program_var main_struct;
+	pthread_t threads[N/2];
+	printf("creating %d threads\n",N/2 );
+	temp=(complex_int *)malloc((N/2)*sizeof(complex_int));
+	for(t=0;t<N/2;t++){
+		//printf("arg sent is %d\n",t );
+		pthread_create(&threads[t],NULL,comp_multiply,(void *)&t);
+	}
+	for(t=0;t<(N/2);t++){
+		pthread_join(threads[t], NULL);
+	}
+
 	
+	// for(int i=0;i<(N/2);i++){
+	// 	printf("i is %d and real is %d and complex is %d \n",i,temp[i].real,temp[i].complex);
+	// }
 
 }
