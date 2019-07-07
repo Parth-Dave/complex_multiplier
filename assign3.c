@@ -7,8 +7,8 @@
 
 
 typedef struct {
-	int real;
-	int complex;
+	long int real;
+	long int complex;
 }complex_int;
 
 typedef struct {
@@ -45,17 +45,17 @@ complex_int *data_readfile(){
 	
 	complex_int *C_array=(complex_int *)malloc(N*sizeof(complex_int));
 	
-	int j;
+	long int j;
 	char c;
 	int sum=0;
 	int flag=0;
 	
 	for(int i=0;i<N;i++){
-		scanf("%d",&j);
+		scanf("%ld",&j);
 		C_array[i].real=j;
 		scanf("%c",&c);
 		scanf("%c",&c);
-		scanf("%d",&j);
+		scanf("%ld",&j);
 		C_array[i].complex=j;
 		
 	}
@@ -81,19 +81,20 @@ int main(int argc,char **argv){
 			pthread_join(threads[t], NULL);//joining threads
 		}
 		if(N%2!=0){
-			printf("main_i is %d\n",main_i);
+		//	printf("main_i is %d\n",main_i);
 			temp[main_i]=D[(main_i)*2];//adding the remaining complex number
 			N++;
 
 		}
-		printf("N/2 after adding remainder complex is %d\n",N/2 );
+		//printf("N/2 after adding remainder complex is %d\n",N/2 );
 		for(t=0;t<(N/2);t++){
 			D[t]=temp[t];//preparing data for next round;
 		}
 		N=N/2;//next round of multiplication
-		printf("N at end of loop is %d\n",N );
+	//	printf("N at end of loop is %d\n",N );
+		//printf(" multiplication is %ld + i%ld \n",D[0].real,D[0].complex );
 	}
-	printf("Final multiplication is %d + i%d \n",D[0].real,D[0].complex );
+	printf("Final multiplication is %ld + i%ld \n",D[0].real,D[0].complex );
 	
 
 }
